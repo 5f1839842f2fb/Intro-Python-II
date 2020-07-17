@@ -1,5 +1,7 @@
 from room import Room
 from player import Player
+from item import item
+
 # Declare all the rooms
 
 room = {
@@ -33,6 +35,16 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+item1 = item('item1', 'very magical')
+item2 = item('item2', 'very magical')
+item3 = item('item3', 'very magical')
+treasure = item('treasure', 'valuable')
+
+room['outside'].items.append(item1)
+room['overlook'].items.append(item2)
+room['foyer'].items.append(item3)
+room['treasure'].items.append(treasure)
+
 #
 # Main
 #
@@ -53,21 +65,35 @@ player.location = room['outside']
 #
 # If the user enters "q", quit the game.
 
+verb = ''
+noun = ''
 inp = ''
-while inp != 'q':
-    print("\n"+player.location.fullname+ " - " +player.location.description+"\n ")
+
+while verb != 'q':
+    print(player.location.fullname+ " - " +player.location.description+"\n ")
+    print("Inventory: "+ str(player.items))
+    print("Items in room: "+ str(player.location.items)+ "\n")
     print("Enter direction (n s e w) or q to quit")
 
+    inp = input()
+    split = inp.split()
+    verb = split[0]
+    if len(split) > 1:
+        noun = split[1]
+
     try:
-        inp = input()
-        if inp == 'n':
+        if verb == 'n':
             player.location = room[player.location.name].n_to
-        elif inp == 's':
+        elif verb == 's':
             player.location = room[player.location.name].s_to
-        elif inp == 'e':
+        elif verb == 'e':
             player.location = room[player.location.name].e_to
-        elif inp == 'w':
+        elif verb == 'w':
             player.location = room[player.location.name].w_to
+        elif verb == 'take':
+            player.take(noun)
+        elif verb == 'drop':
+            player.drop(noun)
+        print('---------------------------------------------------------------------------')
     except:
-        print("Invalid direction")
-    
+        print("!!Invalid direction!! \n")

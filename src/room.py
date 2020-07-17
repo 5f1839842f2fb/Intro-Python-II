@@ -6,3 +6,5 @@ class Room():
     self.name = name
     self.fullname = fullname
     self.description = description
+    self.items = []
+
